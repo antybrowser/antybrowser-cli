@@ -1,5 +1,5 @@
 class AntybrowserCli < Formula
-  desc "CLI tool for managing Antybrowser profiles, proxies, and automations"
+  desc "CLI for Antybrowser anti-detect browser - manage profiles, proxies, extensions, and automations"
   homepage "https://antybrowser.com"
   version "1.0.0"
   license "MIT"

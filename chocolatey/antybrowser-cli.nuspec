@@ -3,19 +3,40 @@
   <metadata>
     <id>antybrowser-cli</id>
     <version>1.0.0</version>
-    <title>Antybrowser CLI</title>
+    <title>Antybrowser CLI - Anti-Detect Browser Command Line</title>
     <authors>Antybrowser.com</authors>
     <owners>antybrowser</owners>
     <license type="expression">MIT</license>
     <projectUrl>https://antybrowser.com</projectUrl>
     <projectSourceUrl>https://github.com/antybrowser/antybrowser-cli</projectSourceUrl>
     <packageSourceUrl>https://github.com/antybrowser/antybrowser-cli</packageSourceUrl>
+    <docsUrl>https://docs.antybrowser.com</docsUrl>
     <iconUrl>https://antybrowser.com/favicon.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>CLI tool for managing Antybrowser profiles, proxies, and automations</description>
-    <summary>Antybrowser command-line interface</summary>
-    <tags>antybrowser cli browser automation proxy fingerprint</tags>
+    <description>
+Antybrowser CLI is a command-line interface for Antybrowser, the anti-detect browser for multi-account management, affiliate marketing, web scraping, and online privacy.
+
+Manage browser profiles with unique fingerprints, proxy configurations (HTTP, SOCKS4, SOCKS5), browser extensions, profile groups, and browser automations directly from your terminal.
+
+Features:
+- Create, list, start, stop, duplicate, and delete browser profiles
+- Manage proxies with bulk connectivity checking
+- Organize profiles into groups with custom colors
+- Run browser automations from the command line
+- JSON output for scripting and CI/CD pipelines
+- Persistent configuration for API URL and authentication key
+- Cross-platform: macOS (ARM/Intel), Linux (ARM/x64), Windows (ARM/x64)
+
+Requires the Antybrowser desktop app to be running. The CLI connects to the local API server on port 5173.
+
+Website: https://antybrowser.com
+Documentation: https://docs.antybrowser.com
+GitHub: https://github.com/antybrowser/antybrowser-cli
+    </description>
+    <summary>Command-line interface for Antybrowser anti-detect browser - manage profiles, proxies, extensions, and automations from the terminal</summary>
     <releaseNotes>https://github.com/antybrowser/antybrowser-cli/releases/tag/cli-v1.0.0</releaseNotes>
+    <copyright>Copyright (c) 2026 Antybrowser.com</copyright>
+    <tags>antybrowser cli browser automation proxy fingerprint multi-account anti-detect scraping privacy profiles command-line terminal csharp cli-tool</tags>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
