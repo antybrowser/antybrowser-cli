@@ -1,0 +1,64 @@
+name: antybrowser
+base: core22
+version: '2.0.9'
+summary: Anti-detect browser for multi-account management
+description: |
+  Antybrowser is an anti-detect browser that lets you manage multiple browser profiles
+  with unique fingerprints, proxy settings, and isolated browser states.
+
+  Features:
+  - Profile management with unique fingerprints
+  - Proxy chain support (HTTP, SOCKS4, SOCKS5)
+  - Extension management
+  - Cookie import/export
+  - Team collaboration
+  - S3 sync for profile backup
+
+grade: stable
+confinement: strict
+
+architectures:
+  - build-on: amd64
+  - build-on: arm64
+
+apps:
+  antybrowser:
+    command: antybrowser/antybrowser --no-sandbox
+    extensions: [gnome]
+    plugs:
+      - browser-support
+      - network
+      - network-bind
+      - unity7
+      - desktop
+      - desktop-legacy
+      - home
+      - removable-media
+      - opengl
+      - x11
+      - wayland
+    environment:
+      TMPDIR: $XDG_RUNTIME_DIR
+      DISABLE_WAYLAND: 1
+
+parts:
+  antybrowser:
+    plugin: nil
+    source: .
+    override-build: |
+      curl -L "https://github.com/antybrowser/antybrowser/releases/download/v$SNAPCRAFT_PROJECT_VERSION/Antybrowser-$SNAPCRAFT_PROJECT_VERSION-linux-x64.tar.gz" -o app.tar.gz
+      tar -xzf app.tar.gz
+      mkdir -p $SNAPCRAFT_PART_INSTALL/antybrowser
+      cp -rv antybrowser-linux-x64/* $SNAPCRAFT_PART_INSTALL/antybrowser/
+    stage-packages:
+      - libnss3
+      - libnspr4
+      - libgtk-3-0
+      - libnotify4
+      - libgconf-2-4
+      - libxss1
+      - libxtst6
+      - libatspi2.0-0
+      - libdrm2
+      - libgbm1
+      - libasound2

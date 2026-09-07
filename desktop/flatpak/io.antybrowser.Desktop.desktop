@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Antybrowser
+Comment=Anti-detect browser for multi-account management
+Exec=antybrowser-run %U
+Icon=io.antybrowser.Desktop
+Type=Application
+Categories=Network;WebBrowser;Security;
+MimeType=x-scheme-handler/antybrowser;
+StartupWMClass=Antybrowser

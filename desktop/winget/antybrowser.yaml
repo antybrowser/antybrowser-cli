@@ -1,0 +1,47 @@
+PackageIdentifier: Antybrowser.Antybrowser
+PackageVersion: 2.0.9
+PackageLocale: en-US
+Publisher: Antybrowser.com
+PublisherUrl: https://antybrowser.com
+PublisherSupportUrl: https://antybrowser.com/support
+PackageName: Antybrowser
+PackageUrl: https://antybrowser.com
+License: MIT
+LicenseUrl: https://antybrowser.com/license
+ShortDescription: Anti-detect browser for multi-account management, affiliate marketing, and web scraping
+Description: |
+  Antybrowser is an anti-detect browser that lets you manage multiple browser profiles
+  with unique fingerprints, proxy settings, and isolated browser states. Features include
+  profile management, fingerprint isolation, proxy chain support, extension management,
+  cookie management, and team collaboration.
+Homepage: https://antybrowser.com
+Tags:
+  - anti-detect
+  - browser
+  - fingerprint
+  - proxy
+  - multi-account
+  - automation
+  - privacy
+  - scraping
+Installers:
+  - Architecture: x64
+    InstallerType: exe
+    InstallerUrl: https://github.com/antybrowser/antybrowser/releases/download/v2.0.9/Antybrowser%20Setup%202.0.9.exe
+    InstallerSha256: PLACEHOLDER_SHA256
+    SilentArgs: /S
+    SilentWithProgressArgs: /S
+    CustomReturnCodes:
+      - 1223
+    ElevationRequirement: elevationRequired
+    InstallModes:
+      - interactive
+      - silent
+      - silentWithProgress
+  - Architecture: x64
+    InstallerType: msix
+    InstallerUrl: https://github.com/antybrowser/antybrowser/releases/download/v2.0.9/Antybrowser-2.0.9-x64.appx
+    InstallerSha256: PLACEHOLDER_SHA256
+    PackageFamilyName: Antybrowser.Antybrowser
+ManifestType: singleton
+ManifestVersion: 1.6.0

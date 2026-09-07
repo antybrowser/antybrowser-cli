@@ -1,0 +1,132 @@
+name: Release CLI
+
+on:
+  push:
+    tags: ['cli-v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'CLI version to build (e.g. 1.0.0)'
+        required: true
+
+env:
+  GO_VERSION: '1.22'
+
+jobs:
+  build:
+    name: Build ${{ matrix.goos }}/${{ matrix.goarch }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: darwin
+            goarch: arm64
+            ext: ''
+          - goos: darwin
+            goarch: amd64
+            ext: ''
+          - goos: linux
+            goarch: arm64
+            ext: ''
+          - goos: linux
+            goarch: amd64
+            ext: ''
+          - goos: windows
+            goarch: amd64
+            ext: '.exe'
+          - goos: windows
+            goarch: arm64
+            ext: '.exe'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Build
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: '0'
+        run: |
+          BINARY_NAME="antybrowser-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.ext }}"
+          go build -trimpath -ldflags="-s -w" -o "$BINARY_NAME" ./cmd/antybrowser
+
+      - name: Package (unix)
+        if: matrix.goos != 'windows'
+        run: |
+          BINARY_NAME="antybrowser-${{ matrix.goos }}-${{ matrix.goarch }}"
+          tar -czf "${BINARY_NAME}.tar.gz" "$BINARY_NAME"
+          echo "BINARY_ARCHIVE=${BINARY_NAME}.tar.gz" >> $GITHUB_ENV
+
+      - name: Package (windows)
+        if: matrix.goos == 'windows'
+        run: |
+          BINARY_NAME="antybrowser-${{ matrix.goos }}-${{ matrix.goarch }}.exe"
+          7z a "${BINARY_NAME%.exe}.zip" "$BINARY_NAME"
+          echo "BINARY_ARCHIVE=${BINARY_NAME%.exe}.zip" >> $GITHUB_ENV
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: ${{ env.BINARY_ARCHIVE }}
+          if-no-files-found: error
+
+  create-release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            echo "version=${GITHUB_REF#refs/tags/cli-v}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Calculate SHA256 checksums
+        run: |
+          cd release-artifacts
+          find . -type f \( -name "*.tar.gz" -o -name "*.zip" \) -exec sha256sum {} \; | tee ../checksums.txt
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: cli-v${{ steps.version.outputs.version }}
+          name: Antybrowser CLI v${{ steps.version.outputs.version }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            release-artifacts/**/*.tar.gz
+            release-artifacts/**/*.zip
+            checksums.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  update-package-managers:
+    name: Update Package Managers
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Calculate checksums
+        id: checksums
+        run: |
+          VERSION="${{ needs.create-release.outputs.version || github.ref_name }}"
+          echo "CLI version: $VERSION"
+          echo "Would update all CLI package manager manifests"

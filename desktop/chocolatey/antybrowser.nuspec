@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>antybrowser</id>
+    <version>2.0.9</version>
+    <title>Antybrowser</title>
+    <authors>Antybrowser.com</authors>
+    <owners>antybrowser</owners>
+    <license type="expression">MIT</license>
+    <projectUrl>https://antybrowser.com</projectUrl>
+    <projectSourceUrl>https://github.com/antybrowser/antybrowser</projectSourceUrl>
+    <packageSourceUrl>https://github.com/antybrowser/antybrowser-cli</packageSourceUrl>
+    <iconUrl>https://antybrowser.com/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Anti-detect browser for multi-account management, affiliate marketing, and web scraping</description>
+    <summary>Manage multiple browser profiles with unique fingerprints, proxies, and isolated browser states</summary>
+    <tags>antybrowser anti-detect browser fingerprint proxy multi-account automation privacy scraping</tags>
+    <releaseNotes>https://github.com/antybrowser/antybrowser/releases</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

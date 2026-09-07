@@ -1,102 +1,110 @@
-# Antybrowser CLI
+# Antybrowser
 
 [![GitHub Release](https://img.shields.io/github/v/release/antybrowser/antybrowser-cli?style=flat-square&color=blue)](https://github.com/antybrowser/antybrowser-cli/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-Command-line interface for managing [Antybrowser](https://antybrowser.com) profiles, proxies, and automations.
+Tools for managing [Antybrowser](https://antybrowser) profiles, proxies, and automations.
 
-## Features
+## Products
 
-- Create, list, start, and stop browser profiles
-- Manage proxy configurations
-- Run browser automations from the terminal
-- Full API access to all Antybrowser features
-- Cross-platform: macOS, Linux, and Windows
+| Product | Description | Install |
+|---------|-------------|---------|
+| **[Desktop App](https://github.com/antybrowser/antybrowser)** | Full GUI for profile management | See below |
+| **[CLI](#cli-installation)** | Command-line interface | See below |
+| **[SDK](https://github.com/antybrowser/SDK)** | Multi-language API client | See below |
 
-## Installation
+---
 
-### macOS (Homebrew)
-
-```bash
-brew tap antybrowser/tap https://github.com/antybrowser/homebrew-tap
-brew install antybrowser
-```
-
-Or directly:
-
-```bash
-brew install --formula https://raw.githubusercontent.com/antybrowser/antybrowser-cli/main/homebrew/antybrowser.rb
-```
-
-### Linux
-
-#### Debian / Ubuntu (.deb)
-
-```bash
-# Download the latest .deb from GitHub Releases, then:
-sudo dpkg -i antybrowser_1.0.0_amd64.deb
-sudo apt-get install -f
-```
-
-#### Snap
-
-```bash
-sudo snap install antybrowser
-```
-
-#### Flatpak
-
-```bash
-flatpak install flathub io.antybrowser.CLI
-```
-
-#### Docker
-
-```bash
-docker pull antybrowser/cli:latest
-docker run --rm antybrowser/cli antybrowser --help
-```
+## Desktop App Installation
 
 ### Windows
 
-#### WinGet
-
+#### WinGet (recommended)
 ```powershell
-winget install antybrowser.Antybrowser
+winget install Antybrowser.Antybrowser
 ```
 
 #### Chocolatey
-
 ```powershell
 choco install antybrowser
 ```
 
 #### Scoop
-
 ```powershell
 scoop bucket add antybrowser https://github.com/antybrowser/scoop-bucket
 scoop install antybrowser
 ```
 
-### Manual Installation
+#### Manual Download
+Download `Antybrowser Setup {version}.exe` from [GitHub Releases](https://github.com/antybrowser/antybrowser/releases/latest).
 
-Download the latest binary for your platform from [GitHub Releases](https://github.com/antybrowser/antybrowser-cli/releases/latest):
+### Linux
 
-| Platform       | Archive                                          |
-|----------------|--------------------------------------------------|
-| macOS (ARM)    | `antybrowser-darwin-arm64.tar.gz`               |
-| macOS (Intel)  | `antybrowser-darwin-amd64.tar.gz`               |
-| Linux (ARM)    | `antybrowser-linux-arm64.tar.gz`                |
-| Linux (x64)    | `antybrowser-linux-amd64.tar.gz`                |
-| Windows (ARM)  | `antybrowser-windows-arm64.zip`                 |
-| Windows (x64)  | `antybrowser-windows-amd64.zip`                 |
+#### Snap
+```bash
+sudo snap install antybrowser
+```
 
-Extract and add to your `PATH`.
+#### Flatpak
+```bash
+flatpak install flathub io.antybrowser.Desktop
+```
+
+#### DEB (Debian/Ubuntu)
+```bash
+# Download .deb from GitHub Releases, then:
+sudo dpkg -i antybrowser_*.deb
+sudo apt-get install -f
+```
+
+#### RPM (Fedora/RHEL)
+```bash
+# Download .rpm from GitHub Releases, then:
+sudo rpm -i antybrowser_*.rpm
+```
+
+#### AppImage (portable)
+```bash
+chmod +x Antybrowser_*.AppImage
+./Antybrowser_*.AppImage
+```
+
+### macOS
+
+#### Homebrew
+```bash
+brew install --cask antybrowser
+```
+
+#### Manual Download
+Download `Antybrowser-{version}-mac-universal.dmg` from [GitHub Releases](https://github.com/antybrowser/antybrowser/releases/latest).
+
+---
+
+## CLI Installation
+
+### macOS / Linux (Homebrew)
+
+```bash
+brew install antybrowser-cli
+```
+
+### Windows
+
+#### WinGet
+```powershell
+winget install Antybrowser.AntybrowserCLI
+```
+
+#### Chocolatey
+```powershell
+choco install antybrowser-cli
+```
 
 ### Go
 
 ```bash
-go install github.com/antybrowser/antybrowser-cli@latest
+go install github.com/antybrowser/antybrowser-cli/cmd/antybrowser@latest
 ```
 
 ### npm
@@ -110,6 +118,28 @@ npm install -g @antybrowser/cli
 ```bash
 pip install antybrowser-cli
 ```
+
+### Manual Download
+
+Download the latest binary from [GitHub Releases](https://github.com/antybrowser/antybrowser-cli/releases/latest):
+
+| Platform       | Archive                                          |
+|----------------|--------------------------------------------------|
+| macOS (ARM)    | `antybrowser-darwin-arm64.tar.gz`               |
+| macOS (Intel)  | `antybrowser-darwin-amd64.tar.gz`               |
+| Linux (ARM)    | `antybrowser-linux-arm64.tar.gz`                |
+| Linux (x64)    | `antybrowser-linux-amd64.tar.gz`                |
+| Windows (ARM)  | `antybrowser-windows-arm64.zip`                 |
+| Windows (x64)  | `antybrowser-windows-amd64.zip`                 |
+
+### Docker
+
+```bash
+docker pull antybrowser/cli:latest
+docker run --rm antybrowser/cli antybrowser --help
+```
+
+---
 
 ## Quick Start
 
@@ -133,37 +163,32 @@ antybrowser profiles start <profile-id>
 antybrowser profiles update <profile-id> --proxy "socks5://user:pass@host:port"
 ```
 
-## Configuration
-
-Antybrowser CLI reads configuration from `~/.antybrowser/config.json` or environment variables:
-
-| Variable              | Description                      | Default                     |
-|-----------------------|----------------------------------|-----------------------------|
-| `ANTYBROWSER_API_KEY` | API key for cloud features       | —                           |
-| `ANTYBROWSER_API_URL` | Local API server URL             | `http://127.0.0.1:3001`     |
-| `ANTYBROWSER_PROFILE` | Config profile to use            | `default`                   |
+---
 
 ## SDK Libraries
 
 Official SDKs are available for 7 languages:
 
-| Language   | Package                    | Repository                                                |
-|------------|----------------------------|-----------------------------------------------------------|
-| TypeScript | `@antybrowser/sdk`         | [github.com/antybrowser/SDK](https://github.com/antybrowser/SDK) |
-| Python     | `antybrowser`              | [github.com/antybrowser/SDK](https://github.com/antybrowser/SDK) |
-| C#         | `Antybrowser.SDK`          | [github.com/antybrowser/SDK](https://github.com/antybrowser/SDK) |
-| Go         | `github.com/antybrowser/sdk-go` | [github.com/antybrowser/SDK](https://github.com/antybrowser/SDK) |
-| PHP        | `antybrowser/sdk`          | [github.com/antybrowser/SDK](https://github.com/antybrowser/SDK) |
-| Ruby       | `antybrowser`              | [github.com/antybrowser/SDK](https://github.com/antybrowser/SDK) |
-| Java       | `com.antybrowser.sdk`      | [github.com/antybrowser/SDK](https://github.com/antybrowser/SDK) |
+| Language   | Package                    | Repository |
+|------------|----------------------------|------------|
+| TypeScript | `@antybrowser/sdk`         | [SDK](https://github.com/antybrowser/SDK) |
+| Python     | `antybrowser`              | [SDK](https://github.com/antybrowser/SDK) |
+| C#         | `Antybrowser.SDK`          | [SDK](https://github.com/antybrowser/SDK) |
+| Go         | `github.com/antybrowser/sdk-go` | [SDK](https://github.com/antybrowser/SDK) |
+| PHP        | `antybrowser/sdk`          | [SDK](https://github.com/antybrowser/SDK) |
+| Ruby       | `antybrowser`              | [SDK](https://github.com/antybrowser/SDK) |
+| Java       | `com.antybrowser.sdk`      | [SDK](https://github.com/antybrowser/SDK) |
+
+---
 
 ## Links
 
-- [Antybrowser Website](https://antybrowser.com)
+- [Website](https://antybrowser.com)
 - [Documentation](https://docs.antybrowser.com)
-- [GitHub Releases](https://github.com/antybrowser/antybrowser-cli/releases)
-- [SDK Repository](https://github.com/antybrowser/SDK)
-- [Report Issues](https://github.com/antybrowser/antybrowser-cli/issues)
+- [Download](https://antybrowser.com/download)
+- [Blog](https://antybrowser.com/blog)
+- [Changelog](https://antybrowser.com/changelog)
+- [Support](mailto:support@antybrowser.com)
 
 ## License
 

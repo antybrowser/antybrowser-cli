@@ -1,0 +1,42 @@
+PackageIdentifier: Antybrowser.AntybrowserCLI
+PackageVersion: 1.0.0
+PackageLocale: en-US
+Publisher: Antybrowser.com
+PublisherUrl: https://antybrowser.com
+PublisherSupportUrl: https://antybrowser.com/support
+PackageName: Antybrowser CLI
+PackageUrl: https://github.com/antybrowser/antybrowser-cli
+License: MIT
+LicenseUrl: https://antybrowser.com/license
+ShortDescription: CLI tool for managing Antybrowser profiles, proxies, and automations
+Description: |
+  Command-line interface for Antybrowser. Create, manage, and automate browser profiles
+  from the terminal. Supports profile creation, proxy configuration, extension management,
+  and integration with CI/CD pipelines.
+Homepage: https://antybrowser.com
+Tags:
+  - antybrowser
+  - cli
+  - browser
+  - automation
+  - proxy
+  - fingerprint
+Installers:
+  - Architecture: x64
+    InstallerType: zip
+    InstallerUrl: https://github.com/antybrowser/antybrowser-cli/releases/download/cli-v1.0.0/antybrowser-windows-amd64.zip
+    InstallerSha256: PLACEHOLDER_SHA256
+    NestedInstallerType: portable
+    NestedInstallerFiles:
+      - RelativeFilePath: antybrowser.exe
+        PortableCommandAlias: antybrowser
+  - Architecture: arm64
+    InstallerType: zip
+    InstallerUrl: https://github.com/antybrowser/antybrowser-cli/releases/download/cli-v1.0.0/antybrowser-windows-arm64.zip
+    InstallerSha256: PLACEHOLDER_SHA256
+    NestedInstallerType: portable
+    NestedInstallerFiles:
+      - RelativeFilePath: antybrowser.exe
+        PortableCommandAlias: antybrowser
+ManifestType: singleton
+ManifestVersion: 1.6.0

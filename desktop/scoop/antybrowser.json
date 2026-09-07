@@ -1,0 +1,26 @@
+{
+    "version": "2.0.9",
+    "description": "Anti-detect browser for multi-account management, affiliate marketing, and web scraping",
+    "homepage": "https://antybrowser.com",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/antybrowser/antybrowser/releases/download/v2.0.9/Antybrowser-2.0.9-win-x64.zip",
+            "hash": "PLACEHOLDER_SHA256"
+        }
+    },
+    "bin": "Antybrowser.exe",
+    "shortcuts": [
+        ["Antybrowser.exe", "Antybrowser"]
+    ],
+    "checkver": {
+        "github": "https://github.com/antybrowser/antybrowser"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/antybrowser/antybrowser/releases/download/v$version/Antybrowser-$version-win-x64.zip"
+            }
+        }
+    }
+}

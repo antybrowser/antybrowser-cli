@@ -1,0 +1,215 @@
+name: Update Package Managers
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to update to (e.g. 2.1.0)'
+        required: true
+      dry_run:
+        description: 'Dry run (skip actual updates)'
+        type: boolean
+        default: false
+
+jobs:
+  update-winget:
+    name: Update WinGet Manifest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Calculate checksums
+        id: checksums
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          echo "Calculating checksums for version $VERSION..."
+
+          # Download release assets and calculate checksums
+          NSIS_URL="https://github.com/antybrowser/antybrowser/releases/download/v${VERSION}/Antybrowser%20Setup%20${VERSION}.exe"
+          APPX_URL="https://github.com/antybrowser/antybrowser/releases/download/v${VERSION}/Antybrowser-${VERSION}-x64.appx"
+
+          NSIS_SHA=$(curl -sL "$NSIS_URL" | sha256sum | cut -d' ' -f1)
+          APPX_SHA=$(curl -sL "$APPX_URL" | sha256sum | cut -d' ' -f1)
+
+          echo "nsis_sha=$NSIS_SHA" >> $GITHUB_OUTPUT
+          echo "appx_sha=$APPX_SHA" >> $GITHUB_OUTPUT
+
+      - name: Update WinGet manifest
+        if: inputs.dry_run != true
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          NSIS_SHA="${{ steps.checksums.outputs.nsis_sha }}"
+          APPX_SHA="${{ steps.checksums.outputs.appx_sha }}"
+
+          sed -i "s/PackageVersion: .*/PackageVersion: $VERSION/" desktop/winget/antybrowser.yaml
+          sed -i "s|InstallerUrl:.*Setup.*|InstallerUrl: https://github.com/antybrowser/antybrowser/releases/download/v${VERSION}/Antybrowser%20Setup%20${VERSION}.exe|" desktop/winget/antybrowser.yaml
+          sed -i "s|InstallerUrl:.*appx.*|InstallerUrl: https://github.com/antybrowser/antybrowser/releases/download/v${VERSION}/Antybrowser-${VERSION}-x64.appx|" desktop/winget/antybrowser.yaml
+          sed -i "0,/PLACEHOLDER_SHA256/{s/PLACEHOLDER_SHA256/$NSIS_SHA/}" desktop/winget/antybrowser.yaml
+          sed -i "0,/PLACEHOLDER_SHA256/{s/PLACEHOLDER_SHA256/$APPX_SHA/}" desktop/winget/antybrowser.yaml
+
+          echo "Updated WinGet manifest to version $VERSION"
+
+      - name: Create WinGet PR
+        if: inputs.dry_run != true
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update WinGet manifest to v${{ steps.version.outputs.version }}"
+          title: "Update Antybrowser to v${{ steps.version.outputs.version }}"
+          body: |
+            Automated update of WinGet manifest for Antybrowser v${{ steps.version.outputs.version }}.
+
+            Changes:
+            - Version bump to ${{ steps.version.outputs.version }}
+            - Updated installer URLs
+            - Updated SHA256 checksums
+          branch: "update-winget-v${{ steps.version.outputs.version }}"
+          base: main
+
+  update-chocolatey:
+    name: Update Chocolatey Package
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          if ("${{ inputs.version }}" -ne "") {
+            echo "version=${{ inputs.version }}" >> $env:GITHUB_OUTPUT
+          } else {
+            $tag = "${{ github.ref_name }}"
+            echo "version=$tag" >> $env:GITHUB_OUTPUT
+          }
+
+      - name: Update Chocolatey manifest
+        if: inputs.dry_run != true
+        run: |
+          $VERSION = "${{ steps.version.outputs.version }}"
+          $NSIS_URL = "https://github.com/antybrowser/antybrowser/releases/download/v$VERSION/Antybrowser%20Setup%20$VERSION.exe"
+
+          (Get-Content desktop/chocolatey/antybrowser.nuspec) -replace '<version>.*</version>', "<version>$VERSION</version>" | Set-Content desktop/chocolatey/antybrowser.nuspec
+          (Get-Content desktop/chocolatey/tools/chocolateyinstall.ps1) -replace 'releases/download/v[\d.]+', "releases/download/v$VERSION" | Set-Content desktop/chocolatey/tools/chocolateyinstall.ps1
+
+          Write-Host "Updated Chocolatey manifest to version $VERSION"
+
+  update-scoop:
+    name: Update Scoop Bucket
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: antybrowser/scoop-bucket
+          token: ${{ secrets.TAP_REPO_TOKEN }}
+
+      - name: Get version
+        id: version
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Download and calculate hash
+        id: hash
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          URL="https://github.com/antybrowser/antybrowser/releases/download/v${VERSION}/Antybrowser-${VERSION}-win-x64.zip"
+          HASH=$(curl -sL "$URL" | sha256sum | cut -d' ' -f1)
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+
+      - name: Update manifest
+        if: inputs.dry_run != true
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          HASH="${{ steps.hash.outputs.hash }}"
+
+          cat > bucket/antybrowser.json << EOF
+          {
+              "version": "$VERSION",
+              "description": "Anti-detect browser for multi-account management, affiliate marketing, and web scraping",
+              "homepage": "https://antybrowser.com",
+              "license": "MIT",
+              "architecture": {
+                  "64bit": {
+                      "url": "https://github.com/antybrowser/antybrowser/releases/download/v${VERSION}/Antybrowser-${VERSION}-win-x64.zip",
+                      "hash": "$HASH"
+                  }
+              },
+              "bin": "Antybrowser.exe",
+              "shortcuts": [
+                  ["Antybrowser.exe", "Antybrowser"]
+              ],
+              "checkver": {
+                  "github": "https://github.com/antybrowser/antybrowser"
+              },
+              "autoupdate": {
+                  "architecture": {
+                      "64bit": {
+                          "url": "https://github.com/antybrowser/antybrowser/releases/download/v\$version/Antybrowser-\$version-win-x64.zip"
+                      }
+                  }
+              }
+          }
+          EOF
+
+      - name: Commit and push
+        if: inputs.dry_run != true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "chore: update antybrowser to v${{ steps.version.outputs.version }}"
+          git push
+
+  publish-snap:
+    name: Publish to Snap Store
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Build Snap
+        uses: snapcore/action-build@v1
+        id: build
+
+      - name: Publish to Snap Store
+        uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_TOKEN }}
+        with:
+          snap: ${{ steps.build.outputs.snap }}
+          release: stable
+
+  notify:
+    name: Send Notifications
+    needs: [update-winget, update-chocolatey, update-scoop, publish-snap]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Summary
+        run: |
+          echo "## Package Manager Updates" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Manager | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| WinGet | ${{ needs.update-winget.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Chocolatey | ${{ needs.update-chocolatey.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Scoop | ${{ needs.update-scoop.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Snap Store | ${{ needs.publish-snap.result }} |" >> $GITHUB_STEP_SUMMARY
