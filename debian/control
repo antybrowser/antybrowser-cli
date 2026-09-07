@@ -1,0 +1,9 @@
+Package: antybrowser
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Maintainer: Antybrowser.com <support@antybrowser.com>
+Homepage: https://antybrowser.com
+Description: CLI tool for Antybrowser
+ Manage browser profiles, proxies, and automations from the command line.

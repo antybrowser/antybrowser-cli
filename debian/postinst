@@ -1,0 +1,4 @@
+#!/bin/sh
+set -e
+echo "Antybrowser CLI installed successfully."
+echo "Run 'antybrowser --help' to get started."

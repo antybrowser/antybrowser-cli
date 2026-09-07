@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>antybrowser</id>
+    <version>1.0.0</version>
+    <title>Antybrowser CLI</title>
+    <authors>Antybrowser.com</authors>
+    <owners>antybrowser</owners>
+    <license type="expression">MIT</license>
+    <projectUrl>https://antybrowser.com</projectUrl>
+    <projectSourceUrl>https://github.com/antybrowser/antybrowser-cli</projectSourceUrl>
+    <packageSourceUrl>https://github.com/antybrowser/antybrowser-cli</packageSourceUrl>
+    <iconUrl>https://antybrowser.com/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>CLI tool for managing Antybrowser profiles, proxies, and automations</description>
+    <summary>Antybrowser command-line interface</summary>
+    <tags>antybrowser cli browser automation proxy fingerprint</tags>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

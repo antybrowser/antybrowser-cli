@@ -1,0 +1,26 @@
+name: antybrowser
+base: core22
+version: '1.0.0'
+summary: CLI tool for Antybrowser
+description: |
+  Manage browser profiles, proxies, and automations from the command line.
+  Connect to the Antybrowser Local API to create, start, stop, and manage
+  anti-detect browser profiles programmatically.
+grade: stable
+confinement: strict
+
+architectures:
+  - build-on: amd64
+  - build-on: arm64
+
+parts:
+  antybrowser:
+    plugin: download
+    source: https://github.com/antybrowser/antybrowser-cli/releases/download/v1.0.0/antybrowser-linux-amd64.tar.gz
+    source-checksum: sha256/PLACEHOLDER_SHA256
+
+apps:
+  antybrowser:
+    command: antybrowser
+    plugs:
+      - network
