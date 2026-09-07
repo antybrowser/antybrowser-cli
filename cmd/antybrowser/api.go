@@ -17,7 +17,7 @@ type apiClient struct {
 
 func newAPIClient() *apiClient {
 	return &apiClient{
-		baseURL: apiURL,
+		baseURL: getDefaultAPIURL(),
 		apiKey:  getAPIKey(),
 		httpClient: &http.Client{
 			Timeout: 30 * time.Second,
