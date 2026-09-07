@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
-    <id>antybrowser</id>
+    <id>antybrowser-cli</id>
     <version>1.0.0</version>
     <title>Antybrowser CLI</title>
     <authors>Antybrowser.com</authors>

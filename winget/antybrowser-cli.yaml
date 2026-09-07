@@ -11,8 +11,7 @@ LicenseUrl: https://antybrowser.com/license
 ShortDescription: CLI tool for managing Antybrowser profiles, proxies, and automations
 Description: |
   Command-line interface for Antybrowser. Create, manage, and automate browser profiles
-  from the terminal. Supports profile creation, proxy configuration, extension management,
-  and integration with CI/CD pipelines.
+  from the terminal. Requires Antybrowser desktop app to be running.
 Homepage: https://antybrowser.com
 Tags:
   - antybrowser

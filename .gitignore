@@ -17,6 +17,8 @@ desktop.ini
 *.deb
 *.rpm
 *.nupkg
+dist/
+antybrowser-cli
 
 # Node
 node_modules/
