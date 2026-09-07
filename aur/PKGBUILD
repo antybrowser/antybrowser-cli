@@ -2,25 +2,18 @@
 pkgname=antybrowser-cli
 pkgver=1.0.0
 pkgrel=1
-pkgdesc="CLI tool for managing Antybrowser profiles, proxies, and automations"
+pkgdesc="CLI for Antybrowser anti-detect browser - manage profiles, proxies, extensions, and automations"
 arch=('x86_64' 'aarch64')
 url="https://antybrowser.com"
 license=('MIT')
 depends=()
-makedepends=('go')
 provides=('antybrowser-cli')
-conflicts=('antybrowser-cli-bin')
-source=("$pkgname-$pkgver.tar.gz::https://github.com/antybrowser/antybrowser-cli/archive/refs/tags/cli-v$pkgver.tar.gz")
-sha256sums=('PLACEHOLDER_SHA256')
-
-build() {
-  cd "$pkgname-$pkgver"
-  go build -trimpath -ldflags="-s -w" -o antybrowser ./cmd/antybrowser
-}
+conflicts=()
+source_x86_64=("$pkgname-$pkgver-x86_64.tar.gz::https://github.com/antybrowser/antybrowser-cli/releases/download/cli-v$pkgver/antybrowser-linux-amd64.tar.gz")
+source_aarch64=("$pkgname-$pkgver-aarch64.tar.gz::https://github.com/antybrowser/antybrowser-cli/releases/download/cli-v$pkgver/antybrowser-linux-arm64.tar.gz")
+sha256sums_x86_64=('afaa12f4ad4c7fe9d2c8302818db11e26b3a0e66a82937e3785403a05e808a8b')
+sha256sums_aarch64=('d1d16f35473b08261f4509d942dbaa451bbbb9cd6a2cac2f5fab92b46ce98445')
 
 package() {
-  cd "$pkgname-$pkgver"
   install -Dm755 antybrowser "$pkgdir/usr/bin/antybrowser"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
 }

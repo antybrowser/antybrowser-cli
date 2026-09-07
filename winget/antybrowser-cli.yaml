@@ -1,4 +1,4 @@
-PackageIdentifier: Antybrowser.AntybrowserCLI
+PackageIdentifier: Antybrowser.CLI
 PackageVersion: 1.0.0
 PackageLocale: en-US
 Publisher: Antybrowser.com
@@ -43,9 +43,6 @@ Tags:
   - profiles
   - command-line
   - terminal
-Agreements:
-  - AgreementIdentifier: MIT-LICENSE
-    AgreementUrl: https://antybrowser.com/license
 ReleaseNotes: |
   Antybrowser CLI v1.0.0 - Initial release
 

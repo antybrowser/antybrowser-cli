@@ -6,7 +6,7 @@
     <title>Antybrowser CLI - Anti-Detect Browser Command Line</title>
     <authors>Antybrowser.com</authors>
     <owners>antybrowser</owners>
-    <license type="expression">MIT</license>
+    <licenseUrl>https://antybrowser.com/license</licenseUrl>
     <projectUrl>https://antybrowser.com</projectUrl>
     <projectSourceUrl>https://github.com/antybrowser/antybrowser-cli</projectSourceUrl>
     <packageSourceUrl>https://github.com/antybrowser/antybrowser-cli</packageSourceUrl>
