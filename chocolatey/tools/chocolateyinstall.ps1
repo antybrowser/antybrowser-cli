@@ -6,5 +6,12 @@ $checksumType = 'sha256'
 
 Install-ChocolateyZipPackage -PackageName 'antybrowser-cli' -Url $url -UnzipLocation "$env:toolsDirectory" -Checksum $checksum -ChecksumType $checksumType
 
-$binPath = Join-Path "$env:toolsDirectory" "antybrowser.exe"
-Install-BinFile -Name 'antybrowser' -Path $binPath
+$extractedBin = Join-Path "$env:toolsDirectory" "antybrowser-windows-amd64.exe"
+$targetBin = Join-Path "$env:toolsDirectory" "antybrowser.exe"
+
+if (Test-Path $extractedBin) {
+    Copy-Item $extractedBin $targetBin -Force
+    Remove-Item $extractedBin -Force -ErrorAction SilentlyContinue
+}
+
+Install-BinFile -Name 'antybrowser' -Path $targetBin
