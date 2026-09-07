@@ -6,11 +6,11 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/antybrowser/antybrowser-cli/releases/download/cli-v1.0.0/antybrowser-windows-amd64.zip",
-            "hash": "PLACEHOLDER_SHA256"
+            "hash": "656a6401b20ba7541d90f986942816c703e6bb98d966469fd7a6f45e6b36525b"
         },
         "arm64": {
             "url": "https://github.com/antybrowser/antybrowser-cli/releases/download/cli-v1.0.0/antybrowser-windows-arm64.zip",
-            "hash": "PLACEHOLDER_SHA256"
+            "hash": "c0ade56a0f58752276716423020b516e08bb8a4ae64094522bfc6e9cbdee5412"
         }
     },
     "bin": "antybrowser.exe",

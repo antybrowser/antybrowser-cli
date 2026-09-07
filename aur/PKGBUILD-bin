@@ -11,8 +11,8 @@ provides=('antybrowser-cli')
 conflicts=('antybrowser-cli')
 source_x86_64=("$pkgname-$pkgver-x86_64.tar.gz::https://github.com/antybrowser/antybrowser-cli/releases/download/cli-v$pkgver/antybrowser-linux-amd64.tar.gz")
 source_aarch64=("$pkgname-$pkgver-aarch64.tar.gz::https://github.com/antybrowser/antybrowser-cli/releases/download/cli-v$pkgver/antybrowser-linux-arm64.tar.gz")
-sha256sums_x86_64=('PLACEHOLDER_SHA256')
-sha256sums_aarch64=('PLACEHOLDER_SHA256')
+sha256sums_x86_64=('afaa12f4ad4c7fe9d2c8302818db11e26b3a0e66a82937e3785403a05e808a8b')
+sha256sums_aarch64=('d1d16f35473b08261f4509d942dbaa451bbbb9cd6a2cac2f5fab92b46ce98445')
 
 package() {
   install -Dm755 antybrowser "$pkgdir/usr/bin/antybrowser"

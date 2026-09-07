@@ -15,6 +15,7 @@
     <description>CLI tool for managing Antybrowser profiles, proxies, and automations</description>
     <summary>Antybrowser command-line interface</summary>
     <tags>antybrowser cli browser automation proxy fingerprint</tags>
+    <releaseNotes>https://github.com/antybrowser/antybrowser-cli/releases/tag/cli-v1.0.0</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
