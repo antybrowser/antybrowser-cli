@@ -130,3 +130,39 @@ jobs:
           VERSION="${{ needs.create-release.outputs.version || github.ref_name }}"
           echo "CLI version: $VERSION"
           echo "Would update all CLI package manager manifests"
+
+  push-docker:
+    name: Push to Docker Hub
+    needs: create-release
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Linux x64 binary
+        uses: actions/download-artifact@v4
+        with:
+          name: cli-linux-amd64
+          path: build
+
+      - name: Prepare binary
+        run: |
+          cd build
+          tar -xzf antybrowser-linux-amd64.tar.gz
+          chmod +x antybrowser-linux-amd64
+          mv antybrowser-linux-amd64 antybrowser
+
+      - name: Build Docker image
+        run: |
+          docker build -t antybrowser/cli:latest -t antybrowser/cli:${{ github.ref_name }} .
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push to Docker Hub
+        run: |
+          docker push antybrowser/cli:latest
+          docker push antybrowser/cli:${{ github.ref_name }}

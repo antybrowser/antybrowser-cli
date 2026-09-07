@@ -7,7 +7,6 @@ LABEL org.opencontainers.image.title="Antybrowser CLI" \
       org.opencontainers.image.vendor="Antybrowser.com" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.keywords="antybrowser,cli,browser,automation,proxy,fingerprint,multi-account,anti-detect,scraping,privacy"
-RUN apk add --no-cache curl && \
-    curl -fsSL https://github.com/antybrowser/antybrowser-cli/releases/download/cli-v1.0.0/antybrowser-linux-amd64.tar.gz | tar xz -C /usr/local/bin && \
-    apk del curl
+COPY build/antybrowser /usr/local/bin/antybrowser
+RUN chmod +x /usr/local/bin/antybrowser
 ENTRYPOINT ["antybrowser"]
